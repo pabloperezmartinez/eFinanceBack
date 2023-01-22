@@ -42,9 +42,11 @@ exports.retrieveExpenses = (req, res, next) => {
     let arraySort=(fieldSort != undefined ? fieldSort : "").split("~");
     let sortJson={};
     arraySort.forEach(e=>{
-        let arrayPrmSort=e.split("-");
-        let sortType = arrayPrmSort[1] == "asc" ? 1:-1;
-        sortJson[arrayPrmSort[0]] = sortType;
+        if(e!=''){
+            let arrayPrmSort=e.split("-");
+            let sortType = arrayPrmSort[1] == "asc" ? 1:-1;
+            sortJson[arrayPrmSort[0]] = sortType;
+        }
     });
 
     const pageSize = + req.query.pageSize;
