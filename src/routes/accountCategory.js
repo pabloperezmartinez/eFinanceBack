@@ -8,5 +8,6 @@ const AccountCategoryController = require('../controllers/accountCategory');
  */
  router.post('', checkAuth, AccountCategoryController.createAccountCategory);
  router.get('', AccountCategoryController.retrieveAccountCategories);
- 
+ router.post('/deleteAccountCategory', AccountCategoryController.deleteAccountCategory);
+
  module.exports = router;
