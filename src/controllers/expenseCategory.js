@@ -13,7 +13,7 @@ exports.createExpenseCategory = (req, res, next) => {
         color: req.body.color,
         creator: req.userData.userId ? req.userData.userId : null
     });
-    expenseCategory.save().then(income => {
+    expenseCategory.save().then(expenseCategory => {
         res.status(201).json({
             expenseCategory: {
                 ... expenseCategory,
@@ -53,5 +53,25 @@ exports.retrieveExpenseCategories = (req, res, next) => {
         res.status(500).json({
             message: err.message
         });
+    });
+};
+
+/**
+ * Remove Expense Categories
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.removeExpenseCategories = (req, res, next) => {
+    const id = req.body.id;
+    ExpenseCategory.findByIdAndDelete({ _id: id }).then(expense => {
+        res.status(200).json({
+            expense,
+            id: expense._id
+        });
+    }).catch(err => {
+        res.status(500).json({
+            message: err.message
+        })
     });
 };
