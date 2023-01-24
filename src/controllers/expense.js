@@ -79,9 +79,9 @@ exports.retrieveExpenses = (req, res, next) => {
  */
 exports.removeExpense = (req, res, next) => {
     const id = req.body.id;
-    Expense.findByIdAndDelete({ _id: id }).then(expense => {
+    Expense.findByIdAndDelete({ _id: id }).then(data => {
         res.status(200).json({
-            expense,
+            expense: data,
             id: expense._id
         });
     }).catch(err => {
