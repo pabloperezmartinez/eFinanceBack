@@ -28,6 +28,23 @@ exports.createAccount = (req, res, next) => {
     });
 }
 
+
+exports.deleteAccount = (req, res, next) => {
+    const accountQuery = Account.findByDelete(req.userData.userId);
+    const account = Account(accountQuery);
+    account.then(result => {
+        res.status(201).json({
+            account: {
+            message: "Account has been deleted",
+            }
+        });
+    }).catch( err => {
+        res.status(500).json({
+            message: err.message
+        })
+    });
+}
+
 /**
  * Retrieves all accounts
  * @param {*} req 
