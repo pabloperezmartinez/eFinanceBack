@@ -81,8 +81,8 @@ exports.removeExpense = (req, res, next) => {
     const id = req.body.id;
     Expense.findByIdAndDelete({ _id: id }).then(data => {
         res.status(200).json({
-            expense: data,
-            id: expense._id
+            data,
+            id: data._id
         });
     }).catch(err => {
         res.status(500).json({

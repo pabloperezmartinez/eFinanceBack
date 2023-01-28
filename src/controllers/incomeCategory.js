@@ -37,7 +37,17 @@ exports.createIncomeCategory = (req, res, next) => {
 exports.retrieveAccountCategories = (req, res, next) => {
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const incomeCategoryQuery = IncomeCategory.find();
+    const fieldSort = req.query.sort;
+    let arraySort = (fieldSort != undefined ? fieldSort : "").split("~");
+    let sortJson = {};
+    arraySort.forEach(e => {
+        if (e != '') {
+            let arrayPrmSort = e.split("-");
+            let sortType = arrayPrmSort[1] == "asc" ? 1 : -1;
+            sortJson[arrayPrmSort[0]] = sortType;
+        }
+    });
+    const incomeCategoryQuery = IncomeCategory.find().sort(sortJson);
     let fetchedIncomeCategories;
     if (currentPage && pageSize) {
         incomeCategoryQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
@@ -54,5 +64,25 @@ exports.retrieveAccountCategories = (req, res, next) => {
         res.status(500).json({
             message: err.message
         });
+    });
+};
+
+/**
+ * Remove incomeCategory
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.removeCategory = (req, res, next) => {
+    const id = req.body.id;
+    IncomeCategory.findByIdAndDelete({ _id: id }).then(data => {
+        res.status(200).json({
+            data,
+            id: data._id
+        });
+    }).catch(err => {
+        res.status(500).json({
+            message: err.message
+        })
     });
 };

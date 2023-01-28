@@ -62,8 +62,7 @@ exports.deleteEstimation = (req, res, next) => {
     const { id } = req.body;
     Estimation.findByIdAndDelete({ _id: id })
       .then((deleteEstimation) => {
-      //   console.log('deleteEstimation', deleteEstimation);
-        res.status(201).json({
+        res.status(200).json({
           message: 'The record has been deleted',
           result: deleteEstimation,
         });
