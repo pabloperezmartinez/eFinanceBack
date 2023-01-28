@@ -28,6 +28,22 @@ exports.createAccountCategory = (req, res, next) => {
     });
 };
 
+exports.deleteAccountCategory = (req, res, next) => {
+    const accountCategoryQuery = Account.findByDelete(req.userData.userId);
+    const account = Account(accountCategoryQuery);
+    account.then(resut => {
+        res.status(201).json({
+            account: {
+            message: "Account Category has been deleted",
+            }
+        });
+    }).catch( err => {
+        res.status(500).json({
+            message: err.message
+        })
+    });
+}
+
 /**
  * Retrieves account categories list
  * @param {*} req 
