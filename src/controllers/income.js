@@ -1,4 +1,6 @@
 const Income = require('../models/income');
+const DataSourceResult = require('../models/DataSourceResult');
+let dataSourceResult = new DataSourceResult();
 
 /**
  * Creates an income
@@ -61,10 +63,12 @@ exports.retrieveIncomes = (req, res, next) => {
         fetchedIncomes = documents;
         return Income.find({ creator: req.userData.userId, $lt: monthBeginning }).count();
     }).then(count => {
-        res.status(200).json({
-            incomes: fetchedIncomes,
-            maxIncomes: count
-        });
+        dataSourceResult.toDataSourceResult(fetchedIncomes);
+        res.status(200).json(
+            dataSourceResult
+            // incomes: fetchedIncomes,
+            // maxIncomes: count
+        );
     }).catch(err => {
         res.status(500).json({
             message: err.message

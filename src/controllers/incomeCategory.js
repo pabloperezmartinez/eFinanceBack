@@ -1,4 +1,6 @@
 const IncomeCategory = require('../models/incomeCategory');
+const DataSourceResult = require('../models/DataSourceResult');
+let dataSourceResult = new DataSourceResult();
 
 /**
  * Creates account category
@@ -56,10 +58,12 @@ exports.retrieveAccountCategories = (req, res, next) => {
         fetchedIncomeCategories = documents;
         return IncomeCategory.count();
     }).then(count => {
-        res.status(200).json({
-            incomeCategories: fetchedIncomeCategories,
-            maxIncomeCategories: count
-        });
+        dataSourceResult.toDataSourceResult(fetchedIncomeCategories);
+        res.status(200).json(
+            dataSourceResult
+            // incomeCategories: fetchedIncomeCategories,
+            // maxIncomeCategories: count
+        );
     }).catch(err => {
         res.status(500).json({
             message: err.message

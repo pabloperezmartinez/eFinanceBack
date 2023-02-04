@@ -1,4 +1,6 @@
 const AccountCategory = require('../models/accountCategory');
+const DataSourceResult = require('../models/DataSourceResult');
+let dataSourceResult = new DataSourceResult();
 
 /**
  * Creates account category
@@ -71,10 +73,12 @@ exports.retrieveAccountCategories = (req, res, next) => {
         fetchedAccountCategories = documents;
         return AccountCategory.findDefaultAndCustom().count();
     }).then(count => {
-        res.status(200).json({
-            accountCategories: fetchedAccountCategories,
-            maxAccountCategories: count
-        });
+        dataSourceResult.toDataSourceResult(fetchedAccountCategories);
+        res.status(200).json(
+            dataSourceResult
+            // accountCategories: fetchedAccountCategories,
+            // maxAccountCategories: count
+        );
     }).catch(err => {
         res.status(500).json({
             message: err.message

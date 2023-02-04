@@ -1,4 +1,7 @@
 const Account = require('../models/account');
+const DataSourceResult = require('../models/DataSourceResult');
+let dataSourceResult = new DataSourceResult();
+
 
 /**
  * Creates account
@@ -71,10 +74,12 @@ exports.retrieveAccounts = (req, res, next) => {
         fetchedAccounts = documents;
         return Account.findByCreator(req.userData.userId).count();
     }).then(count => {
-        res.status(200).json({
-            accounts: fetchedAccounts,
-            maxAccounts: count
-        });
+        dataSourceResult.toDataSourceResult(fetchedAccounts);
+        res.status(200).json(
+            dataSourceResult
+            // accounts: fetchedAccounts,
+            // maxAccounts: count
+        );
     }).catch(err => {
         res.status(500).json({
             message: err.message
