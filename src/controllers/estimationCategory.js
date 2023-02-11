@@ -1,4 +1,6 @@
 const EstimationCategory = require('../models/estimationCategory');
+const DataSourceResult = require('../models/DataSourceResult');
+let dataSourceResult = new DataSourceResult();
 
 /**
  * Estimation cagegory creator
@@ -60,14 +62,37 @@ exports.retrieveEstimationChildrenCategories = (req, res, next) => {
         fetchedEstimationCategories = documents;
         return EstimationCategory.find({parentCategory: categoryId}).count();
     }).then(count => {
-        res.status(200).json({
-            estimationCategories: fetchedEstimationCategories,
-            maxEstimationCategories: count,
-            since: monthBeginning
-        });
+        dataSourceResult.toDataSourceResult(fetchedEstimationCategories);
+        res.status(200).json(
+            dataSourceResult
+            // estimationCategories: fetchedEstimationCategories,
+            // maxEstimationCategories: count,
+            // since: monthBeginning
+        );
     }).catch(err => {
         res.status(500).json({
             message: err.message
         });
     });
 }
+
+/**
+ * Delete estimation category
+ */
+exports.deleteEstimationCategory = (req, res, next) => {
+    const { id } = req.body;
+    EstimationCategory.findByIdAndDelete({ _id: id })
+      .then((deleteEstimationCategory) => {
+      //   console.log('deleteEstimationCategory', deleteEstimationCategory);
+        res.status(201).json({
+          message: 'The record has been deleted',
+          result: deleteEstimationCategory,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err.message,
+        });
+      });
+  };
+  

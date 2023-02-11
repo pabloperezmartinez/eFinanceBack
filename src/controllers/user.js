@@ -61,7 +61,10 @@ exports.createUser =  (req, res, next) => {
         res.status(200).json({
             token: token,
             expiresIn: 3600,
-            userId: fetchUser._id
+            userId: fetchUser._id,
+            email: fetchUser.email,
+            name: fetchUser.name,
+            lastName:fetchUser.lastname
         })
     }).catch(err => {
         return res.status(401).json({
